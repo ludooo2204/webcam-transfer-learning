@@ -18,7 +18,7 @@
 import * as tf from '@tensorflow/tfjs';
 import * as tfd from '@tensorflow/tfjs-data';
 
-import {ControllerDataset} from './controller_dataset';
+import { ControllerDataset } from './controller_dataset';
 import * as ui from './ui';
 
 // The number of classes we want to predict. In this example, we will be
@@ -38,11 +38,11 @@ let model;
 // we'll use as input to our classifier model.
 async function loadTruncatedMobileNet() {
   const mobilenet = await tf.loadLayersModel(
-      'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json');
+    'https://storage.googleapis.com/tfjs-models/tfjs/mobilenet_v1_0.25_224/model.json');
 
   // Return a model that outputs an internal activation.
   const layer = mobilenet.getLayer('conv_pw_13_relu');
-  return tf.model({inputs: mobilenet.inputs, outputs: layer.output});
+  return tf.model({ inputs: mobilenet.inputs, outputs: layer.output });
 }
 
 // When the UI buttons are pressed, read a frame from the webcam and associate
@@ -75,7 +75,7 @@ async function train() {
       // technically a layer, this only performs a reshape (and has no training
       // parameters).
       tf.layers.flatten(
-          {inputShape: truncatedMobileNet.outputs[0].shape.slice(1)}),
+        { inputShape: truncatedMobileNet.outputs[0].shape.slice(1) }),
       // Layer 1.
       tf.layers.dense({
         units: ui.getDenseUnits(),
@@ -100,16 +100,16 @@ async function train() {
   // categorical classification which measures the error between our predicted
   // probability distribution over classes (probability that an input is of each
   // class), versus the label (100% probability in the true class)>
-  model.compile({optimizer: optimizer, loss: 'categoricalCrossentropy'});
+  model.compile({ optimizer: optimizer, loss: 'categoricalCrossentropy' });
 
   // We parameterize batch size as a fraction of the entire dataset because the
   // number of examples that are collected depends on how many examples the user
   // collects. This allows us to have a flexible batch size.
   const batchSize =
-      Math.floor(controllerDataset.xs.shape[0] * ui.getBatchSizeFraction());
+    Math.floor(controllerDataset.xs.shape[0] * ui.getBatchSizeFraction());
   if (!(batchSize > 0)) {
     throw new Error(
-        `Batch size is 0 or NaN. Please choose a non-zero fraction.`);
+      `Batch size is 0 or NaN. Please choose a non-zero fraction.`);
   }
 
   // Train the model! Model.fit() will shuffle xs & ys so we don't have to.
@@ -144,6 +144,10 @@ async function predict() {
     // to the class the model thinks is the most probable given the input.
     const predictedClass = predictions.as1D().argMax();
     const classId = (await predictedClass.data())[0];
+    console.log('predictedClass');
+    console.log(predictedClass)
+    console.log("classId")
+    console.log(classId)
     img.dispose();
 
     ui.predictClass(classId);
@@ -159,13 +163,13 @@ async function predict() {
 async function getImage() {
   const img = await webcam.capture();
   const processedImg =
-      tf.tidy(() => img.expandDims(0).toFloat().div(127).sub(1));
+    tf.tidy(() => img.expandDims(0).toFloat().div(127).sub(1));
   img.dispose();
   return processedImg;
 }
 
 document.getElementById('train').addEventListener('click', async () => {
-  ui.trainStatus('Training...');
+  ui.trainStatus('en cours...');
   await tf.nextFrame();
   await tf.nextFrame();
   isPredicting = false;

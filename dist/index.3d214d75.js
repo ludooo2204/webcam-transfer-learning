@@ -266,6 +266,10 @@ async function predict() {
         // to the class the model thinks is the most probable given the input.
         const predictedClass = predictions.as1D().argMax();
         const classId = (await predictedClass.data())[0];
+        console.log('predictedClass');
+        console.log(predictedClass);
+        console.log("classId");
+        console.log(classId);
         img.dispose();
         _ui.predictClass(classId);
         await _tfjs.nextFrame();
@@ -283,7 +287,7 @@ async function predict() {
     return processedImg;
 }
 document.getElementById('train').addEventListener('click', async ()=>{
-    _ui.trainStatus('Training...');
+    _ui.trainStatus('en cours...');
     await _tfjs.nextFrame();
     await _tfjs.nextFrame();
     isPredicting = false;
@@ -35730,8 +35734,8 @@ parcelHelpers.export(exports, "version_data", ()=>version
  * limitations under the License.
  * =============================================================================
  */ var _tfjsCore = require("@tensorflow/tfjs-core");
-var global = arguments[3];
 var Buffer = require("buffer").Buffer;
+var global = arguments[3];
 var extendStatics = function(t1, e1) {
     return (extendStatics = Object.setPrototypeOf || ({
         __proto__: []
@@ -38662,6 +38666,8 @@ function startPacman() {
     google.pacman.startGameplay();
 }
 function predictClass(classId) {
+    console.log('classId');
+    console.log(classId);
     google.pacman.keyPressed(CONTROL_CODES[classId]);
     document.body.setAttribute('data-active', CONTROLS[classId]);
 }
